@@ -74,3 +74,216 @@ model Verification {
 
   @@map("verification")
 }
+
+
+// Portfolio-related models
+
+model Project {
+  id           String              @id @default(cuid())
+  title        String
+  description  String
+  category     String
+  image        String?
+  github       String?
+  liveUrl      String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  technologies ProjectTechnology[]
+
+  @@map("project")
+}
+
+model Technology {
+  id       String              @id @default(cuid())
+  name     String              @unique
+  iconName String              // Store the icon identifier (e.g., "RiReactjsFill")
+  projects ProjectTechnology[]
+
+  @@map("technology")
+}
+
+model ProjectTechnology {
+  id           String     @id @default(cuid())
+  projectId    String
+  technologyId String
+  project      Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, technologyId])
+  @@map("project_technology")
+}
+
+model Education {
+  id            String                 @id @default(cuid())
+  institution   String
+  degree        String?                // e.g., "Bachelor of Science", "NCEA Level 3"
+  fieldOfStudy  String?                // e.g., "Computer Science", "General Studies"
+  location      String
+  description   String
+  startDate     String                 // Using String for flexibility ("2014", "NOV 2021", etc.)
+  endDate       String                 // Using String for "PRESENT", dates, etc.
+  gpa           String?                // Optional GPA or grade
+  achievements  String[]               // Array of achievements/awards
+  order         Int                    // For ordering education entries
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  competencies  EducationCompetency[]
+
+  @@map("education")
+}
+
+model WorkExperience {
+  id           String                      @id @default(cuid())
+  company      String
+  position     String
+  location     String
+  description  String
+  startDate    String                      // Using String for flexibility
+  endDate      String                      // Using String for "PRESENT", dates, etc.
+  type         WorkType                    @default(FULL_TIME)
+  order        Int                         // For ordering work experience entries
+  createdAt    DateTime                    @default(now())
+  updatedAt    DateTime                    @updatedAt
+  competencies WorkExperienceCompetency[]
+
+  @@unique([company, position])
+  @@map("work_experience")
+}
+
+model Organization {
+  id           String                      @id @default(cuid())
+  name         String
+  role         String?                     // e.g., "Member", "Volunteer", "President"
+  location     String
+  description  String
+  startDate    String
+  endDate      String                      // Can be "PRESENT"
+  type         OrganizationType            @default(CLUB)
+  achievements String[]                    // Array of achievements within the organization
+  order        Int                         // For ordering organization entries
+  createdAt    DateTime                    @default(now())
+  updatedAt    DateTime                    @updatedAt
+  competencies OrganizationCompetency[]
+
+  @@unique([name, role])
+  @@map("organization")
+}
+
+model Certification {
+  id             String                      @id @default(cuid())
+  name           String
+  issuingBody    String                      // e.g., "Cisco", "Microsoft", "Google"
+  credentialId   String?                     // Optional credential ID
+  credentialUrl  String?                     // Optional verification URL
+  description    String
+  issueDate      String
+  expiryDate     String?                     // Optional expiry date
+  skills         String[]                    // Array of skills gained
+  order          Int                         // For ordering certification entries
+  createdAt      DateTime                    @default(now())
+  updatedAt      DateTime                    @updatedAt
+  competencies   CertificationCompetency[]
+
+  @@unique([name, issuingBody])
+  @@map("certification")
+}
+
+model Competency {
+  id                    String                     @id @default(cuid())
+  name                  String                     @unique
+  category              String?                    // e.g., "Technical", "Soft Skills", "Programming"
+  educationEntries      EducationCompetency[]
+  workExperienceEntries WorkExperienceCompetency[]
+  organizationEntries   OrganizationCompetency[]
+  certificationEntries  CertificationCompetency[]
+
+  @@map("competency")
+}
+
+model EducationCompetency {
+  id           String     @id @default(cuid())
+  educationId  String
+  competencyId String
+  education    Education  @relation(fields: [educationId], references: [id], onDelete: Cascade)
+  competency   Competency @relation(fields: [competencyId], references: [id], onDelete: Cascade)
+
+  @@unique([educationId, competencyId])
+  @@map("education_competency")
+}
+
+model WorkExperienceCompetency {
+  id               String         @id @default(cuid())
+  workExperienceId String
+  competencyId     String
+  workExperience   WorkExperience @relation(fields: [workExperienceId], references: [id], onDelete: Cascade)
+  competency       Competency     @relation(fields: [competencyId], references: [id], onDelete: Cascade)
+
+  @@unique([workExperienceId, competencyId])
+  @@map("work_experience_competency")
+}
+
+model OrganizationCompetency {
+  id             String       @id @default(cuid())
+  organizationId String
+  competencyId   String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  competency     Competency   @relation(fields: [competencyId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, competencyId])
+  @@map("organization_competency")
+}
+
+model CertificationCompetency {
+  id              String        @id @default(cuid())
+  certificationId String
+  competencyId    String
+  certification   Certification @relation(fields: [certificationId], references: [id], onDelete: Cascade)
+  competency      Competency    @relation(fields: [competencyId], references: [id], onDelete: Cascade)
+
+  @@unique([certificationId, competencyId])
+  @@map("certification_competency")
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  quote     String
+  name      String
+  date      String   // Using String to match your format like "25/02/2022"
+  position  String?  // Optional job title/position
+  company   String?  // Optional company name
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testimonial")
+}
+
+model PortfolioContent {
+  id        String   @id @default(cuid())
+  key       String   @unique // e.g., "title.header", "title.subHeader"
+  value     String
+  type      String   @default("text") // "text", "html", "markdown"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("portfolio_content")
+}
+
+enum WorkType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  FREELANCE
+  VOLUNTEER
+}
+
+enum OrganizationType {
+  CLUB
+  SOCIETY
+  VOLUNTEER
+  PROFESSIONAL
+  ACADEMIC
+  COMMUNITY
+  SPORTS
+  HOBBY
+}
