@@ -27,7 +27,7 @@ import { authClient } from "@/lib/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { set, z } from "zod";
@@ -48,6 +48,8 @@ export function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
+  const oauthError = searchParams.get("error");
+  const oauthErrorDescription = searchParams.get("error_description");
 
   const form = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
@@ -57,6 +59,31 @@ export function SignInForm() {
       rememberMe: false,
     },
   });
+
+  // Handle OAuth errors from search params
+  useEffect(() => {
+    if (oauthError) {
+      let errorMessage = "Authentication failed";
+      
+      if (oauthError === "access_denied") {
+        errorMessage = "Authentication was cancelled";
+      } else if (oauthErrorDescription && oauthErrorDescription !== "undefined") {
+        errorMessage = oauthErrorDescription;
+      } else if (oauthError) {
+        // Capitalize and format the error for better UX
+        errorMessage = oauthError.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+      }
+      
+      setError(errorMessage);
+      
+      // Optional: Clear the error params from URL after showing the error
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete("error");
+      newSearchParams.delete("error_description");
+      const newUrl = `${window.location.pathname}${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ""}`;
+      window.history.replaceState({}, "", newUrl);
+    }
+  }, [oauthError, oauthErrorDescription, searchParams]);
 
   async function onSubmit({ email, password, rememberMe }: SignInValues) {
     setError(null);
