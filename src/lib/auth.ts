@@ -76,7 +76,15 @@ export const auth = betterAuth({
       }
     }),
   },
-})
+  onAPIError: {
+		throw: true,
+		onError: (error, ctx) => {
+			// Custom error handling
+			console.error("Auth error:", error);
+		},
+		errorURL: "/sign-in",
+	},
+});
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
