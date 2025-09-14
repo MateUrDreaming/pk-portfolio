@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
+import { Navbar } from "@/components/navbar";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Outfit } from "next/font/google";
@@ -11,8 +12,8 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Pairn Kasabia Portfolio",
-    absolute: "Pairn Kasabia Portfolio ",
+    template: "%s | Parin Kasabia Portfolio",
+    absolute: "Parin Kasabia Portfolio",
   },
   description:
     "A simple portfolio website to showcase my projects and skills.",
@@ -32,7 +33,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+
+            <Navbar />
+            <main className="flex-1">{children}</main>
           <Toaster />
         </ThemeProvider>
       </body>
