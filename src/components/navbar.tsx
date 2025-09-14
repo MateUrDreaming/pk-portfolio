@@ -27,7 +27,7 @@ export function Navbar() {
   const filteredNavLinks = navLinks.filter((link) => !link.authRequired || (link.authRequired && user))
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="absolute top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-semibold text-lg md:text-xl">
