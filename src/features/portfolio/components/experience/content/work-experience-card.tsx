@@ -1,4 +1,3 @@
-// src/features/portfolio/components/experience/content/work-experience-card.tsx
 "use client"
 
 import { useState } from "react"
@@ -13,7 +12,7 @@ import { DeleteConfirmationModal } from "@/features/portfolio/components/experie
 interface WorkExperienceCardProps {
   job: WorkExperience
   isAdmin: boolean
-  onDataChange?: () => void // Add callback for data changes
+  onDataChange?: () => void 
 }
 
 export function WorkExperienceCard({ job, isAdmin, onDataChange }: WorkExperienceCardProps) {

@@ -57,12 +57,10 @@ export function EditWorkExperienceModal({ open, onOpenChange, workExperienceId, 
           achievements: Array.isArray(workExperience.achievements) ? [...workExperience.achievements] : [],
           order: workExperience.order || 0,
         })
-        // Expand sections if they have content
         setIsTechnologiesExpanded(Array.isArray(workExperience.technologies) && workExperience.technologies.length > 0)
         setIsAchievementsExpanded(Array.isArray(workExperience.achievements) && workExperience.achievements.length > 0)
       }
     } else if (!open) {
-      // Reset form when modal closes
       setFormData({
         id: "",
         title: "",

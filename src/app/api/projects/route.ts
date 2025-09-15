@@ -55,7 +55,6 @@ export async function POST(request: NextRequest) {
       order = 0,
     } = body
 
-    // Validate required fields
     if (!title || !description || !duration) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -63,7 +62,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if project already exists
     const existing = await prisma.project.findUnique({
       where: { title },
     })

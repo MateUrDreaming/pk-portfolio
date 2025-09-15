@@ -80,7 +80,6 @@ export function AddWorkExperienceModal({ open, onOpenChange, onSuccess }: AddWor
     setIsAchievementsExpanded(false)
   }
 
-  // Reset form when modal is closed
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
       resetForm()
@@ -88,7 +87,6 @@ export function AddWorkExperienceModal({ open, onOpenChange, onSuccess }: AddWor
     onOpenChange(newOpen)
   }
 
-  // Technologies management
   const addTechnology = () => {
     setFormData(prev => ({
       ...prev,
