@@ -13,8 +13,7 @@ import parinKasabia from "@/assets/parinkasabia.png"
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/dashboard", label: "Dashboard", authRequired: true },
-  { href: "/projects", label: "Projects" },
-  { href: "/about", label: "About" },
+  { href: "/experience", label: "Experience" },
   { href: "/contact", label: "Contact" },
 ]
 
