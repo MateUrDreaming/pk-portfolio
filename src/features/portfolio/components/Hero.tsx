@@ -21,7 +21,7 @@ const Hero = () => {
               <span className="text-primary">I&apos;m Parin Kasabia.</span> 
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground text-pretty leading-relaxed">
-              Recent graduate from the University of Auckland with aspiring to become a DevOps engineeer who is passionate about automation and building robust systems. 
+              Recent graduate from the University of Auckland aspiring to become a DevOps engineeer who is passionate about automation and building robust systems. 
             </p>
             <div className="flex flex-row items-centre justify-center gap-4">
                 <Button asChild size="lg">

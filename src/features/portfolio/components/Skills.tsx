@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Skills = () => {
   return (
-    <main className="flex min-h-svh pt-16 bg-foreground/5">
+    <main className="flex min-h-vh pt-16 bg-background">
       <div className="mx-auto max-w-3xl text-center">
         <div className="mb-8 flex items-center justify-center gap-4">
           <Image
