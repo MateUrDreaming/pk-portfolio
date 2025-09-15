@@ -1,43 +1,35 @@
-import betterAuthLogo from "@/assets/better_auth_logo.png";
-import parinKasabia from "@/assets/parinkasabia.png";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Link from "next/link";
+import SkillCard from "./Skills/SkillCard"
+
+interface Skill {
+  name: string
+  percentage: number
+}
+
+const skills: Skill[] = [
+  { name: "Python Programming", percentage: 100 },
+  { name: "Snowflake", percentage: 80 },
+  { name: "dbt", percentage: 90 },
+  { name: "Data Modelling (SQL)", percentage: 95 },
+]
 
 const Skills = () => {
   return (
-    <main className="flex min-h-vh pt-16 bg-background">
-      <div className="mx-auto max-w-3xl text-center">
-        <div className="mb-8 flex items-center justify-center gap-4">
-          <Image
-            src={parinKasabia}
-            alt="parinKasabia logo"
-            width={80}
-            height={80}
-            className="border-muted rounded-full border"
-          />
-          <span className="text-muted-foreground text-2xl font-bold">+</span>
-          <Image
-            src={betterAuthLogo}
-            alt="Better Auth logo"
-            width={80}
-            height={80}
-            className="border-muted rounded-full border"
-          />
+    <section className="min-h-vh bg-background py-20">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="mb-16 text-center">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground text-balance mb-4">My Skillset</h2>
+          <p className="text-lg md:text-xl text-muted-foreground text-pretty leading-relaxed">
+            Including, but not limited to
+          </p>
         </div>
-        <h1 className="text-3xl font-semibold sm:text-4xl">
-          Better-Auth Template
-        </h1>
-        <div className="mx-auto mt-6 flex max-w-sm flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button asChild>
-            <Link href="/dashboard">Go to Dashboard</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/sign-in">Sign In</Link>
-          </Button>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+          {skills.map((skill) => (
+            <SkillCard key={skill.name} name={skill.name} percentage={skill.percentage} />
+          ))}
         </div>
       </div>
-    </main>
+    </section>
   )
 }
 

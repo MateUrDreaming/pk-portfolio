@@ -54,7 +54,7 @@ const Hero = () => {
           </div>
         </div>
         {/* Carousel Section */}
-        <div className="mt-12 space-y-5">
+        <div className="my-12 space-y-5">
           <h2 className="text-2xl md:text-4xl font-bold text-foreground text-center">Kind words from colleagues</h2>
           {/* Testimonial Carousel Component */}
           <HeroCarousel />

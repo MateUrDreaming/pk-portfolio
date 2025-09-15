@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import Footer from "@/components/footer";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -36,6 +37,7 @@ export default function RootLayout({
 
             <Navbar />
             <main className="flex-1">{children}</main>
+            <Footer />
           <Toaster />
         </ThemeProvider>
       </body>
