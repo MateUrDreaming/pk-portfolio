@@ -22,7 +22,7 @@ export function WorkExperienceCard({ job }: WorkExperienceCardProps) {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <CardTitle className="text-xl text-card-foreground">{job.title}</CardTitle>
-            <CardDescription className="text-lg font-medium text-accent">{job.company}</CardDescription>
+            <CardDescription className="text-lg font-medium text-primary">{job.company}</CardDescription>
           </div>
           <div className="flex flex-col md:items-end gap-2">
             <div className="flex items-center gap-2 text-muted-foreground">
@@ -52,7 +52,7 @@ export function WorkExperienceCard({ job }: WorkExperienceCardProps) {
           <h4 className="font-semibold text-card-foreground mb-2">Technologies:</h4>
           <div className="flex flex-wrap gap-2">
             {job.technologies.map((tech) => (
-              <Badge key={tech} variant="secondary" className="bg-secondary text-secondary-foreground">
+              <Badge key={tech} variant="secondary" className="bg-primary text-secondary-foreground">
                 {tech}
               </Badge>
             ))}

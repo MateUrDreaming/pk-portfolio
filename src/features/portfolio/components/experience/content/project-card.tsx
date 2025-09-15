@@ -59,7 +59,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <h4 className="font-semibold text-card-foreground mb-2">Technologies:</h4>
           <div className="flex flex-wrap gap-2">
             {project.technologies.map((tech) => (
-              <Badge key={tech} variant="secondary" className="bg-secondary text-secondary-foreground">
+              <Badge key={tech} variant="secondary" className="bg-primary text-secondary-foreground">
                 {tech}
               </Badge>
             ))}

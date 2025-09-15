@@ -28,7 +28,7 @@ export function ExperienceFilterBar({
     <div className="bg-card border border-border rounded-lg p-4 mb-8 shadow-sm">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <Select value={activeTab} onValueChange={setActiveTab}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue>
               <div className="flex items-center gap-2">
                 {activeTab === "work" ? (
@@ -61,8 +61,7 @@ export function ExperienceFilterBar({
           </SelectContent>
         </Select>
 
-        {/* Search Bar */}
-        <div className="relative flex-1 max-w-md">
+        <div className="relative w-full md:flex-1 md:max-w-md">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
             type="text"
@@ -72,14 +71,13 @@ export function ExperienceFilterBar({
             className="pl-10"
           />
         </div>
-
         {isUser && (
           <AddExperienceDialog
             activeTab={activeTab}
             isOpen={isAddDialogOpen}
             setIsOpen={setIsAddDialogOpen}
             trigger={
-              <Button size="icon" className="h-10 w-10">
+              <Button size="icon" className="h-10 w-10 shrink-0">
                 <Plus className="h-4 w-4" />
               </Button>
             }
