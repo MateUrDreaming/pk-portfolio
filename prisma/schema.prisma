@@ -287,3 +287,15 @@ enum OrganizationType {
   SPORTS
   HOBBY
 }
+
+model NavigationItem {
+  id            String  @id @default(cuid())
+  name          String
+  url           String
+  authRequired  Boolean @default(false)
+  adminRequired Boolean @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("navigation_item")
+}
