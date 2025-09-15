@@ -1,95 +1,149 @@
+// src/features/portfolio/components/experience/content/project-card.tsx
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from "react"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Github, ExternalLink, Trash2, Edit } from "lucide-react"
+import { ExternalLink, Github, Calendar, Edit, Trash2 } from "lucide-react"
+import { Project, useProjects } from "@/features/portfolio/hooks/use-projects"
+import { EditProjectModal } from "@/features/portfolio/components/experience/filter/modals/edit-project-modal"
+import { DeleteConfirmationModal } from "@/features/portfolio/components/experience/filter/modals/delete-confirmation-modal"
 
 interface ProjectCardProps {
-  project: {
-    id: number
-    title: string
-    description: string
-    technologies: string[]
-    duration: string
-    githubUrl?: string
-    liveUrl?: string
-    highlights: string[]
-  }
-  onDelete?: (id: number) => void
-  onUpdate?: (id: number) => void
+  project: Project
+  isAdmin: boolean
+  onDataChange?: () => void 
 }
 
-export function ProjectCard({ project, onDelete, onUpdate }: ProjectCardProps) {
+export function ProjectCard({ project, isAdmin, onDataChange }: ProjectCardProps) {
+  const { deleteProject, loading, fetchProjects } = useProjects()
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
+  const handleDelete = async () => {
+    const success = await deleteProject(project.id)
+    if (success) {
+      setIsDeleteModalOpen(false)
+
+      if (onDataChange) {
+        onDataChange()
+      } else {
+  
+        await fetchProjects()
+      }
+    }
+  }
+
+  const handleEditSuccess = async () => {
+    if (onDataChange) {
+      onDataChange()
+    } else {
+      await fetchProjects()
+    }
+  }
+
   return (
-    <Card className="bg-card border-border hover:shadow-lg transition-shadow duration-200">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <CardTitle className="text-xl text-card-foreground">{project.title}</CardTitle>
-            <CardDescription className="text-muted-foreground">{project.duration}</CardDescription>
+    <>
+      <Card className="group hover:shadow-lg transition-all duration-300 h-full flex flex-col">
+        <CardHeader className="pb-4">
+          <div className="flex items-start justify-between">
+            <div className="space-y-2">
+              <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                {project.title}
+              </CardTitle>
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <Calendar className="h-3 w-3" />
+                {project.duration}
+              </div>
+            </div>
+            
+            {isAdmin && (
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsEditModalOpen(true)}
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsDeleteModalOpen(true)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </div>
-          <div className="flex gap-2">
+        </CardHeader>
+
+        <CardContent className="flex-1 space-y-4">
+          <p className="text-muted-foreground text-sm leading-relaxed">{project.description}</p>
+
+          {project.technologies.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-foreground">Technologies</h4>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <Badge key={tech} variant="secondary" className="text-xs">
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {project.highlights.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-foreground">Highlights</h4>
+              <ul className="list-disc list-inside space-y-1 text-xs text-muted-foreground">
+                {project.highlights.map((highlight, index) => (
+                  <li key={index}>{highlight}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </CardContent>
+
+        <CardFooter className="pt-4 border-t">
+          <div className="flex gap-2 w-full">
             {project.githubUrl && (
-              <Button size="sm" variant="outline" asChild>
+              <Button variant="outline" size="sm" asChild className="flex-1">
                 <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                  <Github className="h-4 w-4" />
+                  <Github className="h-4 w-4 mr-2" />
+                  Code
                 </a>
               </Button>
             )}
             {project.liveUrl && (
-              <Button size="sm" variant="outline" asChild>
+              <Button variant="outline" size="sm" asChild className="flex-1">
                 <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="h-4 w-4" />
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Live Demo
                 </a>
               </Button>
             )}
           </div>
-        </div>
-        <div className="pt-2 flex gap-2 w-full">
-              <Button
-                size="sm"
-                variant="outline"
-                className="flex items-center gap-2 flex-1"
-              >
-                <Edit className="h-4 w-4" />
-                Update
-              </Button>
-              <Button
-                size="sm"
-                variant="destructive"
-                className="flex items-center gap-2 flex-1"
-              >
-                <Trash2 className="h-4 w-4" />
-                Delete
-              </Button>
-          </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-card-foreground leading-relaxed">{project.description}</p>
+        </CardFooter>
+      </Card>
 
-        <div className="border border-primary rounded-lg p-4">
-          <h4 className="font-semibold text-card-foreground mb-2">Key Features:</h4>
-          <div className="max-h-32 overflow-y-auto pr-2">
-            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              {project.highlights.map((highlight, index) => (
-                <li key={index}>{highlight}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      <EditProjectModal
+        open={isEditModalOpen}
+        onOpenChange={setIsEditModalOpen}
+        projectId={project.id}
+        onSuccess={handleEditSuccess}
+      />
 
-        <div>
-          <h4 className="font-semibold text-card-foreground mb-2">Technologies:</h4>
-          <div className="flex flex-wrap gap-2">
-            {project.technologies.map((tech) => (
-              <Badge key={tech} variant="secondary" className="bg-primary text-secondary-foreground">
-                {tech}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      <DeleteConfirmationModal
+        open={isDeleteModalOpen}
+        onOpenChange={setIsDeleteModalOpen}
+        onConfirm={handleDelete}
+        title={project.title}
+        description="This action cannot be undone."
+        loading={loading}
+      />
+    </>
   )
 }
