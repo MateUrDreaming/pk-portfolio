@@ -7,10 +7,10 @@ const prisma = new PrismaClient()
 // GET /api/projects/[id] - Fetch project by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     const project = await prisma.project.findUnique({
       where: { id },
@@ -36,7 +36,7 @@ export async function GET(
 // PUT /api/projects/[id] - Update project
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession()
@@ -56,7 +56,7 @@ export async function PUT(
       )
     }
 
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
     const {
       title,
@@ -69,7 +69,6 @@ export async function PUT(
       order,
     } = body
 
-    // Check if project exists
     const existing = await prisma.project.findUnique({
       where: { id },
     })
@@ -127,7 +126,7 @@ export async function PUT(
 // DELETE /api/projects/[id] - Delete project
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession()
@@ -147,9 +146,8 @@ export async function DELETE(
       )
     }
 
-    const { id } = params
+    const { id } = await params
 
-    // Check if project exists
     const existing = await prisma.project.findUnique({
       where: { id },
     })

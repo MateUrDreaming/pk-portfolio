@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation"
 interface AddProjectModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSuccess?: () => void // Optional callback for parent to handle success
+  onSuccess?: () => void 
 }
 
 export function AddProjectModal({ open, onOpenChange, onSuccess }: AddProjectModalProps) {
@@ -42,7 +42,6 @@ export function AddProjectModal({ open, onOpenChange, onSuccess }: AddProjectMod
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Filter out empty strings before submitting
     const cleanedData = {
       ...formData,
       technologies: formData.technologies.filter(tech => tech.trim() !== ""),
@@ -52,19 +51,13 @@ export function AddProjectModal({ open, onOpenChange, onSuccess }: AddProjectMod
     const result = await createProject(cleanedData)
     if (result) {
       resetForm()
-      
-      // Option 1: Call onSuccess callback if provided
+
       if (onSuccess) {
         onSuccess()
       }
-      
-      // Option 2: Explicitly refresh the projects data
+
       await fetchProjects()
       
-      // Option 3: Use router.refresh() for full page refresh (if needed)
-      // router.refresh()
-      
-      // Small delay to ensure state updates are applied before closing
       setTimeout(() => {
         onOpenChange(false)
       }, 100)
@@ -86,7 +79,7 @@ export function AddProjectModal({ open, onOpenChange, onSuccess }: AddProjectMod
     setIsHighlightsExpanded(false)
   }
 
-  // Reset form when modal is closed
+
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
       resetForm()
@@ -94,7 +87,6 @@ export function AddProjectModal({ open, onOpenChange, onSuccess }: AddProjectMod
     onOpenChange(newOpen)
   }
 
-  // Technologies management
   const addTechnology = () => {
     setFormData(prev => ({
       ...prev,
@@ -116,7 +108,6 @@ export function AddProjectModal({ open, onOpenChange, onSuccess }: AddProjectMod
     }))
   }
 
-  // Highlights management
   const addHighlight = () => {
     setFormData(prev => ({
       ...prev,

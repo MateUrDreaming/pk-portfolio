@@ -1,4 +1,3 @@
-// src/features/portfolio/components/experience/filter/experience-filter-bar.tsx
 "use client"
 
 import { useState } from "react"
@@ -17,7 +16,7 @@ interface ExperienceFilterBarProps {
   searchTerm: string
   setSearchTerm: (term: string) => void
   isAdmin: boolean
-  onDataChange?: () => void // Add callback for data changes
+  onDataChange?: () => void 
 }
 
 export function ExperienceFilterBar({
@@ -42,7 +41,6 @@ export function ExperienceFilterBar({
   }
 
   const handleWorkExperienceSuccess = async () => {
-    // Trigger data refresh after adding work experience
     if (onDataChange) {
       onDataChange()
     } else {
@@ -52,11 +50,9 @@ export function ExperienceFilterBar({
   }
 
   const handleProjectSuccess = async () => {
-    // Trigger data refresh after adding project
     if (onDataChange) {
       onDataChange()
     } else {
-      // Fallback to direct refresh
       await fetchProjects()
     }
   }

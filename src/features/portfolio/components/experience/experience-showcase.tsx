@@ -9,16 +9,14 @@ import { useProjects } from "@/features/portfolio/hooks/use-projects"
 import { User } from "@/lib/auth"
 
 interface ExperienceShowcaseProps {
-  user?: User | null // Pass the user from your auth session
+  user?: User | null
 }
 
 export function ExperienceShowcase({ user }: ExperienceShowcaseProps) {
-  // Check if user is admin
   const isAdmin = user?.role === "admin"
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("work")
   
-  // Use the hooks at this level
   const { 
     workExperience, 
     loading: workLoading, 
@@ -31,13 +29,10 @@ export function ExperienceShowcase({ user }: ExperienceShowcaseProps) {
     fetchProjects 
   } = useProjects()
 
-  // Combined loading state
   const loading = workLoading || projectsLoading
 
-  // Master refresh function that refreshes all data
   const handleDataRefresh = useCallback(async () => {
     try {
-      // Refresh both work experience and projects
       await Promise.all([
         fetchWorkExperience(),
         fetchProjects()

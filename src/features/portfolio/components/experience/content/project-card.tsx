@@ -1,4 +1,3 @@
-// src/features/portfolio/components/experience/content/project-card.tsx
 "use client"
 
 import { useState } from "react"
