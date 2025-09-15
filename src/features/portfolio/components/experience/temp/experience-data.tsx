@@ -19,7 +19,7 @@ export const workExperience = [
     description:
       "Built and maintained multiple client applications using modern web technologies. Collaborated with design team to create intuitive user experiences.",
     technologies: ["Vue.js", "Python", "Django", "Docker", "MySQL"],
-    achievements: ["Delivered 15+ client projects", "Improved code coverage to 90%", "Reduced bug reports by 50%"],
+    achievements: ["Delivered 15+ client projects", "Improved code coverage to 90%", "Reduced bug reports by 50%", "test"],
   },
   {
     id: 3,
@@ -70,11 +70,11 @@ export const projects = [
     title: "Weather Dashboard",
     description:
       "A comprehensive weather application with location-based forecasts, interactive maps, and weather alerts.",
-    technologies: ["Vue.js", "OpenWeather API", "Mapbox", "Chart.js", "PWA"],
+    technologies: ["Vue.js", "OpenWeather API", "Mapbox", "Chart.js", "PWA", "test"],
     duration: "2022",
     githubUrl: "https://github.com/username/weather-app",
     liveUrl: "https://weather-dashboard-demo.com",
-    highlights: ["Progressive Web App features", "Interactive weather maps", "Push notification alerts"],
+    highlights: ["Progressive Web App features", "Interactive weather maps", "Push notification alerts", "test"],
   },
   {
     id: 4,

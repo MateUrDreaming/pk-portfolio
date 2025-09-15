@@ -1,6 +1,9 @@
+"use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, MapPin } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Calendar, MapPin, Trash2, Edit } from "lucide-react"
 
 interface WorkExperienceCardProps {
   job: {
@@ -13,9 +16,11 @@ interface WorkExperienceCardProps {
     technologies: string[]
     achievements: string[]
   }
+  onDelete?: (id: number) => void
+  onUpdate?: (id: number) => void
 }
 
-export function WorkExperienceCard({ job }: WorkExperienceCardProps) {
+export function WorkExperienceCard({ job, onDelete, onUpdate }: WorkExperienceCardProps) {
   return (
     <Card className="bg-card border-border hover:shadow-lg transition-shadow duration-200">
       <CardHeader>
@@ -35,17 +40,38 @@ export function WorkExperienceCard({ job }: WorkExperienceCardProps) {
             </div>
           </div>
         </div>
+
+          <div className="pt-2 flex gap-2 w-full">
+              <Button
+                size="sm"
+                variant="outline"
+                className="flex items-center gap-2 flex-1"
+              >
+                <Edit className="h-4 w-4" />
+                Update
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                className="flex items-center gap-2 flex-1"
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </Button>
+          </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-card-foreground leading-relaxed">{job.description}</p>
 
-        <div>
+        <div className="border border-primary rounded-lg p-4">
           <h4 className="font-semibold text-card-foreground mb-2">Key Achievements:</h4>
-          <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-            {job.achievements.map((achievement, index) => (
-              <li key={index}>{achievement}</li>
-            ))}
-          </ul>
+          <div className="max-h-32 overflow-y-auto pr-2">
+            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+              {job.achievements.map((achievement, index) => (
+                <li key={index}>{achievement}</li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div>
