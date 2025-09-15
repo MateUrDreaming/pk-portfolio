@@ -5,9 +5,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { FaLinkedin, FaGithub  } from "react-icons/fa";
 import { SiReaddotcv } from "react-icons/si";
+import { MessageSquarePlus } from "lucide-react";
 import HeroCarousel from "./Hero/HeroCarousel";
+import { CreateTestimonialModal } from "@/features/portfolio/components/home/Hero/modal/create-testimonial-model";
+import { getServerSession } from "@/lib/get-session";
 
-const Hero = () => {
+interface HeroProps {
+  user?: any // User from server session
+}
+
+const Hero = ({ user }: HeroProps) => {
   return (
     <section className="min-h-svh bg-background pt-20 md:pt-32">
       <div className="mx-auto max-w-6xl px-4">
@@ -53,11 +60,27 @@ const Hero = () => {
             </div>
           </div>
         </div>
+        
         {/* Carousel Section */}
         <div className="my-12 space-y-5">
-          <h2 className="text-2xl md:text-4xl font-bold text-foreground text-center">Kind words from colleagues</h2>
-          {/* Testimonial Carousel Component */}
-          <HeroCarousel />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-foreground text-center md:text-left">
+              Kind words from colleagues
+            </h2>
+            
+            {/* Testimonial Submission Button */}
+            <CreateTestimonialModal 
+              trigger={
+                <Button variant="outline" className="gap-2 shrink-0">
+                  <MessageSquarePlus className="h-4 w-4" />
+                  Share Your Experience
+                </Button>
+              }
+            />
+          </div>
+          
+          {/* Testimonial Carousel Component - Only shows approved testimonials */}
+          <HeroCarousel user={user} />
         </div>
       </div>
     </section>
