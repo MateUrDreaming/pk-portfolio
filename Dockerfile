@@ -79,15 +79,19 @@ COPY --from=builder --chown=nextjs:nodejs /app/src/generated/prisma ./src/genera
 # Enable pnpm in production stage
 RUN corepack enable pnpm
 
-# Create and copy startup script
-COPY docker-entrypoint.sh ./docker-entrypoint.sh
-RUN chmod +x ./docker-entrypoint.sh
-
 # Change to nextjs user
 USER nextjs
 
 EXPOSE 3000
 ENV PORT=3000
 
-# Use custom entrypoint
-CMD ["./docker-entrypoint.sh"]
+# Run setup and start commands directly
+CMD sh -c "echo 'Waiting for PostgreSQL...' && \
+    while ! nc -z postgres 5432; do sleep 2; done && \
+    echo 'PostgreSQL ready!' && \
+    echo 'Generating Prisma client...' && \
+    pnpm prisma generate && \
+    echo 'Running migrations...' && \
+    pnpm prisma migrate deploy && \
+    echo 'Starting application...' && \
+    pnpm start"
