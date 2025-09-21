@@ -4,15 +4,18 @@ import { useMemo } from "react"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { WorkExperienceCard } from "./work-experience-card"
 import { ProjectCard } from "./project-card"
+import { EducationCard } from "./education-card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { WorkExperience } from "@/features/portfolio/hooks/use-work-experience"
 import { Project } from "@/features/portfolio/hooks/use-projects"
+import { Education } from "@/features/portfolio/hooks/use-education"
 
 interface ExperienceContentProps {
   activeTab: string
   searchTerm: string
   workExperience: WorkExperience[]
   projects: Project[]
+  education: Education[]
   loading: boolean
   isAdmin: boolean
   onDataChange?: () => void 
@@ -23,6 +26,7 @@ export function ExperienceContent({
   searchTerm, 
   workExperience, 
   projects, 
+  education,
   loading,
   isAdmin,
   onDataChange
@@ -45,6 +49,17 @@ export function ExperienceContent({
         item.technologies.some((tech: string) => tech.toLowerCase().includes(searchTerm.toLowerCase())),
     )
   }, [searchTerm, projects])
+
+  const filteredEducation = useMemo(() => {
+    return education.filter(
+      (item) =>
+        item.degree.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.field.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.institution.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.coursework.some((course: string) => course.toLowerCase().includes(searchTerm.toLowerCase())),
+    )
+  }, [searchTerm, education])
 
   if (loading) {
     return (
@@ -91,7 +106,28 @@ export function ExperienceContent({
                 key={project.id} 
                 project={project} 
                 isAdmin={isAdmin}
-                onDataChange={onDataChange} 
+                onDataChange={onDataChange}
+              />
+            ))}
+          </div>
+        )}
+      </TabsContent>
+
+      <TabsContent value="education" className="space-y-6">
+        {filteredEducation.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">
+              {searchTerm ? "No education found matching your search." : "No education added yet."}
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2">
+            {filteredEducation.map((edu) => (
+              <EducationCard 
+                key={edu.id} 
+                education={edu} 
+                isAdmin={isAdmin}
+                onDataChange={onDataChange}
               />
             ))}
           </div>
