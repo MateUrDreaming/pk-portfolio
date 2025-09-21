@@ -1,6 +1,6 @@
 // src/app/api/work-experience/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@/generated/prisma'
+import { PrismaClient } from '@prisma/client'
 import { getServerSession } from '@/lib/get-session'
 
 const prisma = new PrismaClient()
