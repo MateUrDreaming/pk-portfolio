@@ -115,19 +115,19 @@ model Project {
 
 
 model Education {
-  id            String   @id @default(cuid())
-  institution   String
-  degree        String? 
-  fieldOfStudy  String?  
-  location      String
-  description   String
-  startDate     String   
-  endDate       String   
-  gpa           String? 
-  achievements  String[] 
-  order         Int     
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+    id           String   @id @default(cuid())
+    degree       String
+    field        String
+    institution  String
+    location     String
+    duration     String
+    description  String
+    gpa          String?
+    coursework   String[]
+    achievements String[]
+    order        Int      @default(0)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
 
   @@map("education")
 }

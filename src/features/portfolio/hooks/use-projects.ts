@@ -35,7 +35,7 @@ export function useProjects() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch all projects
+
   const fetchProjects = useCallback(async () => {
     try {
       setLoading(true)
@@ -55,7 +55,7 @@ export function useProjects() {
     }
   }, [])
 
-  // Create new project
+
   const createProject = useCallback(async (data: CreateProjectData): Promise<Project | null> => {
     try {
       setLoading(true)
@@ -86,7 +86,7 @@ export function useProjects() {
     }
   }, [])
 
-  // Update project
+
   const updateProject = useCallback(async (data: UpdateProjectData): Promise<Project | null> => {
     try {
       setLoading(true)
@@ -120,7 +120,7 @@ export function useProjects() {
     }
   }, [])
 
-  // Delete project
+
   const deleteProject = useCallback(async (id: string): Promise<boolean> => {
     try {
       setLoading(true)
@@ -146,7 +146,7 @@ export function useProjects() {
     }
   }, [])
 
-  // Get project by ID - memoized to prevent infinite loops
+
   const getProjectById = useCallback((id: string): Project | undefined => {
     try {
       return projects.find(item => item.id === id)

@@ -6,6 +6,7 @@ import { ExperienceFilterBar } from "./filter/experience-filter-bar"
 import { ExperienceContent } from "./content/experience-content"
 import { useWorkExperience } from "@/features/portfolio/hooks/use-work-experience"
 import { useProjects } from "@/features/portfolio/hooks/use-projects"
+import { useEducation } from "@/features/portfolio/hooks/use-education"
 import { User } from "@/lib/auth"
 
 interface ExperienceShowcaseProps {
@@ -29,18 +30,25 @@ export function ExperienceShowcase({ user }: ExperienceShowcaseProps) {
     fetchProjects 
   } = useProjects()
 
-  const loading = workLoading || projectsLoading
+  const { 
+    education, 
+    loading: educationLoading, 
+    fetchEducation 
+  } = useEducation()
+
+  const loading = workLoading || projectsLoading || educationLoading
 
   const handleDataRefresh = useCallback(async () => {
     try {
       await Promise.all([
         fetchWorkExperience(),
-        fetchProjects()
+        fetchProjects(),
+        fetchEducation()
       ])
     } catch (error) {
       console.error('Error refreshing data:', error)
     }
-  }, [fetchWorkExperience, fetchProjects])
+  }, [fetchWorkExperience, fetchProjects, fetchEducation])
 
   return (
     <section className="min-h-svh bg-background pt-20 md:pt-32">
@@ -61,6 +69,7 @@ export function ExperienceShowcase({ user }: ExperienceShowcaseProps) {
           searchTerm={searchTerm}
           workExperience={workExperience}
           projects={projects}
+          education={education}
           loading={loading}
           isAdmin={isAdmin}
           onDataChange={handleDataRefresh}
