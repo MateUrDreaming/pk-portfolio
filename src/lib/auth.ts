@@ -14,9 +14,7 @@ const getBaseURL = () => {
     return process.env.BETTER_AUTH_URL || "http://localhost:3000";
   }
   if (isProduction) {
-    return process.env.BETTER_AUTH_URL || process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}`
-      : "https://parinkasabia.com"; 
+    return process.env.BETTER_AUTH_URL || "https://parinkasabia.com"; 
   }
   return "http://localhost:3000";
 };
@@ -41,15 +39,12 @@ const getTrustedOrigins = () => {
   if (isDevelopment) {
     origins.push("http://localhost:3000", "http://127.0.0.1:3000");
   }
-  
-  if (isProduction && process.env.VERCEL_URL) {
-    origins.push(`https://${process.env.VERCEL_URL}`);
-  }
-  
-  if (process.env.ADDITIONAL_TRUSTED_ORIGINS) {
+
+  if (isProduction && process.env.ADDITIONAL_TRUSTED_ORIGINS) {
     origins.push(...process.env.ADDITIONAL_TRUSTED_ORIGINS.split(','));
   }
   
+  console.log("returned origins", origins)
   return origins;
 };
 
