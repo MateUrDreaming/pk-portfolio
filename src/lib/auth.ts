@@ -5,10 +5,64 @@ import { APIError, createAuthMiddleware } from "better-auth/api";
 import { sendEmail } from './email';
 import { passwordSchema } from './validation';
 
+// Dynamic configuration based on NODE_ENV
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === 'production';
+
+const getBaseURL = () => {
+  if (isDevelopment) {
+    return process.env.BETTER_AUTH_URL || "http://localhost:3000";
+  }
+  if (isProduction) {
+    return process.env.BETTER_AUTH_URL || process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}`
+      : "https://parinkasabia.com"; 
+  }
+  return "http://localhost:3000";
+};
+
+const getSecret = () => {
+  if (isDevelopment) {
+    return process.env.BETTER_AUTH_SECRET || "dev-secret-key-minimum-32-characters-long";
+  }
+  if (isProduction) {
+    if (!process.env.BETTER_AUTH_SECRET) {
+      throw new Error("BETTER_AUTH_SECRET must be set in production");
+    }
+    return process.env.BETTER_AUTH_SECRET;
+  }
+  return "dev-secret-key-minimum-32-characters-long";
+};
+
+const getTrustedOrigins = () => {
+  const baseURL = getBaseURL();
+  const origins = [baseURL];
+  
+  if (isDevelopment) {
+    origins.push("http://localhost:3000", "http://127.0.0.1:3000");
+  }
+  
+  if (isProduction && process.env.VERCEL_URL) {
+    origins.push(`https://${process.env.VERCEL_URL}`);
+  }
+  
+  if (process.env.ADDITIONAL_TRUSTED_ORIGINS) {
+    origins.push(...process.env.ADDITIONAL_TRUSTED_ORIGINS.split(','));
+  }
+  
+  return origins;
+};
+
 export const auth = betterAuth({
+  baseURL: getBaseURL(),
+  secret: getSecret(),
+  
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),
+  
+  trustedOrigins: getTrustedOrigins(),
+  
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -77,13 +131,12 @@ export const auth = betterAuth({
     }),
   },
   onAPIError: {
-		throw: true,
-		onError: (error, ctx) => {
-			// Custom error handling
-			console.error("Auth error:", error);
-		},
-		errorURL: "/sign-in",
-	},
+    throw: true,
+    onError: (error, ctx) => {
+      console.error("Auth error:", error);
+    },
+    errorURL: "/sign-in",
+  },
 });
 
 export type Session = typeof auth.$Infer.Session;

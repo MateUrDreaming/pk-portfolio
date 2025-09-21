@@ -57,6 +57,6 @@ coverage/
 *.tsbuildinfo
 next-env.d.ts
 
-# Prisma
+# Prisma - Only exclude migrations, not generated client
 migrations/
-/src/generated/prisma
+# Removed: /src/generated/prisma - Let Docker handle this during build
