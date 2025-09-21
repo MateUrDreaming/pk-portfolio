@@ -37,7 +37,6 @@ export function useTestimonials() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch all testimonials (admin) or approved testimonials (public)
   const fetchTestimonials = useCallback(async (includeUnapproved = false) => {
     try {
       setLoading(true)
@@ -58,17 +57,14 @@ export function useTestimonials() {
     }
   }, [])
 
-  // Fetch only approved testimonials for public display
   const fetchApprovedTestimonials = useCallback(async () => {
     await fetchTestimonials(false)
   }, [fetchTestimonials])
 
-  // Fetch all testimonials for admin
   const fetchAllTestimonials = useCallback(async () => {
     await fetchTestimonials(true)
   }, [fetchTestimonials])
 
-  // Create new testimonial
   const createTestimonial = useCallback(async (data: CreateTestimonialData): Promise<Testimonial | null> => {
     try {
       setLoading(true)
@@ -105,7 +101,6 @@ export function useTestimonials() {
     }
   }, [])
 
-  // Update testimonial
   const updateTestimonial = useCallback(async (data: UpdateTestimonialData): Promise<Testimonial | null> => {
     try {
       setLoading(true)
@@ -139,7 +134,6 @@ export function useTestimonials() {
     }
   }, [])
 
-  // Delete testimonial
   const deleteTestimonial = useCallback(async (id: string): Promise<boolean> => {
     try {
       setLoading(true)
@@ -165,7 +159,6 @@ export function useTestimonials() {
     }
   }, [])
 
-  // Approve testimonial (admin only)
   const approveTestimonial = useCallback(async (id: string): Promise<boolean> => {
     try {
       setLoading(true)
@@ -194,7 +187,6 @@ export function useTestimonials() {
     }
   }, [])
 
-  // Reject testimonial (admin only)
   const rejectTestimonial = useCallback(async (id: string): Promise<boolean> => {
     try {
       setLoading(true)
@@ -223,7 +215,6 @@ export function useTestimonials() {
     }
   }, [])
 
-  // Get testimonial by ID - memoized to prevent infinite loops
   const getTestimonialById = useCallback((id: string): Testimonial | undefined => {
     return testimonials.find(item => item.id === id)
   }, [testimonials])
