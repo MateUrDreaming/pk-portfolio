@@ -4,13 +4,11 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import { Search, Building, Code, GraduationCap, Plus } from "lucide-react"
+import { Search, Building, Code, Plus } from "lucide-react"
 import { AddWorkExperienceModal } from "@/features/portfolio/components/experience/filter/modals/add-experience-modal"
 import { AddProjectModal } from "@/features/portfolio/components/experience/filter/modals/add-project-modal"
-import { AddEducationModal } from "@/features/portfolio/components/experience/filter/modals/add-education-modal"
 import { useWorkExperience } from "@/features/portfolio/hooks/use-work-experience"
 import { useProjects } from "@/features/portfolio/hooks/use-projects"
-import { useEducation } from "@/features/portfolio/hooks/use-education"
 
 interface ExperienceFilterBarProps {
   activeTab: string
@@ -31,18 +29,14 @@ export function ExperienceFilterBar({
 }: ExperienceFilterBarProps) {
   const { fetchWorkExperience } = useWorkExperience()
   const { fetchProjects } = useProjects()
-  const { fetchEducation } = useEducation()
   const [isAddWorkModalOpen, setIsAddWorkModalOpen] = useState(false)
   const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false)
-  const [isAddEducationModalOpen, setIsAddEducationModalOpen] = useState(false)
 
   const handleAddClick = () => {
     if (activeTab === "work") {
       setIsAddWorkModalOpen(true)
-    } else if (activeTab === "projects") {
+    } else {
       setIsAddProjectModalOpen(true)
-    } else if (activeTab === "education") {
-      setIsAddEducationModalOpen(true)
     }
   }
 
@@ -63,53 +57,6 @@ export function ExperienceFilterBar({
     }
   }
 
-  const handleEducationSuccess = async () => {
-    if (onDataChange) {
-      onDataChange()
-    } else {
-      await fetchEducation()
-    }
-  }
-
-  const getTabIcon = () => {
-    switch (activeTab) {
-      case "work":
-        return <Building className="h-4 w-4" />
-      case "projects":
-        return <Code className="h-4 w-4" />
-      case "education":
-        return <GraduationCap className="h-4 w-4" />
-      default:
-        return <Building className="h-4 w-4" />
-    }
-  }
-
-  const getTabLabel = () => {
-    switch (activeTab) {
-      case "work":
-        return "Work Experience"
-      case "projects":
-        return "Projects"
-      case "education":
-        return "Education"
-      default:
-        return "Work Experience"
-    }
-  }
-
-  const getSearchPlaceholder = () => {
-    switch (activeTab) {
-      case "work":
-        return "Search work experience..."
-      case "projects":
-        return "Search projects..."
-      case "education":
-        return "Search education..."
-      default:
-        return "Search..."
-    }
-  }
-
   return (
     <>
       <div className="bg-card border border-border rounded-lg p-4 mb-8 shadow-sm">
@@ -118,8 +65,17 @@ export function ExperienceFilterBar({
             <SelectTrigger className="w-full md:w-[200px]">
               <SelectValue>
                 <div className="flex items-center gap-2">
-                  {getTabIcon()}
-                  {getTabLabel()}
+                  {activeTab === "work" ? (
+                    <>
+                      <Building className="h-4 w-4" />
+                      Work Experience
+                    </>
+                  ) : (
+                    <>
+                      <Code className="h-4 w-4" />
+                      Projects
+                    </>
+                  )}
                 </div>
               </SelectValue>
             </SelectTrigger>
@@ -136,12 +92,6 @@ export function ExperienceFilterBar({
                   Projects
                 </div>
               </SelectItem>
-              <SelectItem value="education">
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="h-4 w-4" />
-                  Education
-                </div>
-              </SelectItem>
             </SelectContent>
           </Select>
 
@@ -149,7 +99,7 @@ export function ExperienceFilterBar({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               type="text"
-              placeholder={getSearchPlaceholder()}
+              placeholder={`Search ${activeTab === "work" ? "work experience" : "projects"}...`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -174,12 +124,6 @@ export function ExperienceFilterBar({
         open={isAddProjectModalOpen}
         onOpenChange={setIsAddProjectModalOpen}
         onSuccess={handleProjectSuccess}
-      />
-
-      <AddEducationModal
-        open={isAddEducationModalOpen}
-        onOpenChange={setIsAddEducationModalOpen}
-        onSuccess={handleEducationSuccess}
       />
     </>
   )

@@ -17,10 +17,10 @@ const getClientBaseURL = () => {
   
   if (isProduction) {
     return process.env.NEXT_PUBLIC_BASE_URL || 
-           (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://parinkasabia.com');
+           (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://yourdomain.com');
   }
   
-  return 'http://localhost:3000'; 
+  return 'https://parinkasabia.com'; 
 };
 
 export const authClient = createAuthClient({ 
