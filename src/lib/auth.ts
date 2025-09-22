@@ -44,7 +44,6 @@ const getTrustedOrigins = () => {
     origins.push(...process.env.ADDITIONAL_TRUSTED_ORIGINS.split(','));
   }
   
-  console.log("returned origins", origins)
   return origins;
 };
 
